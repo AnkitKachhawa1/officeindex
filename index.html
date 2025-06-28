@@ -2,12 +2,41 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Password Protected Content</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Office Index</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="shortcut icon" href="/favicon-32x32.png" type="image/x-icon">
     <link rel="shortcut icon" href="/favicon-16x16.png" type="image/x-icon">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     <style>
-        body {
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+        :root {
+            --primary-color: #6c63ff;
+            --light-primary-color: #4a4ed6;
+            --background-color: #eef2f7;
+            --container-bg-color: #ffffff;
+            --text-color: #333;
+            --subtle-text-color: #888;
+            --border-color: #dfe7f1;
+            --shadow-color: rgba(0, 0, 0, 0.08);
+        }
+
+        /* Styles for the main application body */
+        body.main-app-body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-color);
+            margin: 0;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        /* Styles for the password prompt body */
+        body.password-prompt-body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             display: flex;
             justify-content: center;
@@ -18,7 +47,9 @@
             padding: 1rem;
             box-sizing: border-box;
         }
-        .container {
+
+        /* Password Prompt Styles */
+        #password-section .container {
             background-color: white;
             padding: clamp(1.5rem, 6vw, 2.5rem);
             border-radius: 20px;
@@ -26,25 +57,25 @@
             width: clamp(280px, 90vw, 400px);
             text-align: center;
         }
-        .lock-icon {
+        #password-section .lock-icon {
             font-size: clamp(2.5rem, 8vw, 3.5rem);
             color: #333;
             margin-bottom: 1.25rem;
         }
-        h1 {
+        #password-section h1 {
             font-size: clamp(1.3rem, 5vw, 1.8rem);
             margin-bottom: 0.8rem;
             color: #333;
         }
-        p {
+        #password-section p {
             color: #666;
             font-size: clamp(0.9rem, 3vw, 1.1rem);
             margin-bottom: 1.8rem;
         }
-        .form-group {
+        #password-section .form-group {
             margin-bottom: 1.8rem;
         }
-        label {
+        #password-section label {
             display: block;
             text-align: left;
             margin-bottom: 0.8rem;
@@ -52,7 +83,7 @@
             font-weight: 500;
             font-size: clamp(1rem, 3vw, 1.2rem);
         }
-        input {
+        #password-section input {
             width: 100%;
             padding: clamp(14px, 4vw, 18px);
             border: 1px solid #ddd;
@@ -60,12 +91,12 @@
             font-size: clamp(1rem, 3vw, 1.2rem);
             box-sizing: border-box;
         }
-        input:focus {
+        #password-section input:focus {
             outline: none;
             border-color: #667eea;
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
         }
-        button {
+        #password-section button {
             background-color: #667eea;
             color: white;
             border: none;
@@ -76,48 +107,424 @@
             width: 100%;
             transition: background-color 0.2s;
         }
-        button:hover {
+        #password-section button:hover {
             background-color: #5c6bc0;
         }
-        @media (hover: none) {
-            button:hover {
-                background-color: #667eea;
+
+        /* Main Content Styles - Restored from original main.html */
+        .header {
+            background: linear-gradient(45deg, var(--primary-color), var(--light-primary-color));
+            box-shadow: 0 4px 20px var(--shadow-color);
+            border-radius: 10px;
+            color: #fff;
+            font-size: clamp(1.5rem, 5vw, 2rem);
+            font-weight: 600;
+            text-align: center;
+            padding: 1rem 1.5rem;
+            width: 100%; /* Ensure it takes full width within its max-width */
+            max-width: 800px;
+            box-sizing: border-box;
+            margin: 0 auto 20px auto; /* Center horizontally and set bottom margin */
+        }
+
+        /* Main Content Styles - Restored from original main.html */
+        #main-content .header {
+            background: linear-gradient(45deg, var(--primary-color), var(--light-primary-color));
+            box-shadow: 0 4px 20px var(--shadow-color);
+            border-radius: 10px;
+            color: #fff;
+            font-size: clamp(1.5rem, 5vw, 2rem);
+            font-weight: 600;
+            text-align: center;
+            padding: 1rem 1.5rem;
+            width: 100%; /* Ensure it takes full width within its max-width */
+            max-width: 800px;
+            box-sizing: border-box;
+            margin: 0 auto 20px auto; /* Center horizontally and set bottom margin */
+        }
+        #main-content .search-system {
+            background-color: var(--container-bg-color);
+            border-radius: 10px;
+            box-shadow: 0 4px 20px var(--shadow-color);
+            padding: clamp(1rem, 5vw, 2rem);
+            width: 100%; /* Ensure it takes full width within its max-width */
+            max-width: 800px; /* Set max-width for alignment */
+            max-height: 500px; /* Fixed max-height for desktop */
+            overflow-y: auto; /* Allow scrolling if content exceeds max-height */
+            box-sizing: border-box;
+            margin: 20px auto 0 auto; /* Center horizontally and set top margin */
+        }
+        /* Hide scrollbar for Webkit browsers */
+        #main-content .search-system::-webkit-scrollbar {
+            display: none;
+        }
+        /* Hide scrollbar for Firefox */
+        #main-content .search-system {
+            scrollbar-width: none; /* Firefox */
+        }
+        #main-content .search-bar {
+            width: 100%;
+            padding: 14px 22px;
+            margin-bottom: 1.5rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            box-sizing: border-box;
+        }
+        #main-content .search-bar:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(108, 99, 255, 0.1);
+        }
+        #main-content .tabs {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+        #main-content .tab {
+            padding: 12px 20px;
+            text-align: center;
+            background-color: transparent;
+            cursor: pointer;
+            flex-grow: 1;
+            font-size: clamp(0.9rem, 3vw, 1rem);
+            font-weight: 600;
+            color: var(--subtle-text-color);
+            transition: color 0.3s ease, border-bottom-color 0.3s ease;
+            border: none;
+            border-bottom: 3px solid transparent;
+        }
+        #main-content .tab.active {
+            color: var(--primary-color);
+            border-bottom: 3px solid var(--primary-color);
+        }
+        #main-content .tabcontent {
+            display: none;
+            max-height: 400px; /* Fixed max-height for tab content */
+            overflow-y: auto; /* Allow scrolling for tab content */
+        }
+        /* Hide scrollbar for Webkit browsers */
+        #main-content .tabcontent::-webkit-scrollbar {
+            display: none;
+        }
+        /* Hide scrollbar for Firefox */
+        #main-content .tabcontent {
+            scrollbar-width: none; /* Firefox */
+        }
+        /* Media query for mobile responsiveness */
+        @media (max-width: 767px) {
+            #main-content .search-system {
+                width: 95%; /* Responsive width for mobile */
+                max-width: none; /* Remove max-width for mobile */
+                max-height: 80vh; /* Responsive max-height for mobile */
+            }
+            #main-content .tabcontent {
+                max-height: none; /* Remove max-height for mobile tab content */
             }
         }
-        @media screen and (max-width: 480px) {
-            body {
-                padding: 0.5rem;
-            }
+        #main-content .placeholder {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            min-height: 200px;
+            color: var(--subtle-text-color);
+            text-align: center;
+        }
+        #main-content .result-count {
+            padding: 10px 15px;
+            font-weight: 500;
+            color: var(--subtle-text-color);
+            border-bottom: 1px solid var(--border-color);
+            background-color: #f7f9fc;
+        }
+        #main-content .result-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        #main-content .result-item {
+            border-bottom: 1px solid var(--border-color);
+        }
+        #main-content .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 10px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        #main-content .result-header:hover {
+            background-color: #f7f9fc;
+        }
+        #main-content .result-header .fas {
+            transition: transform 0.3s ease;
+        }
+        #main-content .result-item.active .result-header .fas {
+            transform: rotate(180deg);
+        }
+        #main-content .result-body {
+            display: none;
+            padding: 10px 15px 20px;
+            background-color: #f7f9fc;
+        }
+        #main-content .result-body p {
+            margin: 8px 0;
+            font-size: 0.9rem;
+        }
+        #main-content .table-wrapper {
+            overflow-x: auto;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        #main-content table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        #main-content th, #main-content td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+            white-space: nowrap;
+        }
+        #main-content th {
+            background-color: #f7f9fc;
+            font-weight: 600;
+            color: #333;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+        #main-content tr:hover {
+            background-color: #f9f9f9;
+        }
+        @media (min-width: 768px) {
+            #main-content .result-list { display: none; }
+        }
+        @media (max-width: 767px) {
+            #main-content .table-wrapper { display: none; }
         }
     </style>
 </head>
-<body>
-    <div class="container">
-        <div class="lock-icon">🔒</div>
-        <h1>This content is protected.</h1>
-        <p>To view, please enter the password</p>
-        <div class="form-group">
-            <label for="passwordInput">Password</label>
-            <input type="password" id="passwordInput" placeholder="Enter your password" autocomplete="current-password" autocapitalize="off" autocorrect="off">
+<body class="password-prompt-body">
+
+    <div id="password-section">
+        <div class="container">
+            <div class="lock-icon">ðŸ”’</div>
+            <h1>This content is protected.</h1>
+            <p>To view, please enter the password</p>
+            <div class="form-group">
+                <label for="passwordInput">Password</label>
+                <input type="password" id="passwordInput" placeholder="Enter your password" autocomplete="current-password" autocapitalize="off" autocorrect="off">
+            </div>
+            <button onclick="checkPassword()">Enter</button>
         </div>
-        <button onclick="checkPassword()">Enter</button>
     </div>
+
+    <div id="main-content" style="display: none;">
+        <div class="header">OFFICE INDEX</div>
+        <div class="search-system">
+            <input type="text" class="search-bar" placeholder="Type to search..." onkeyup="debouncedHandleSearch()">
+            <div class="tabs">
+                <button class="tab active" onclick="openTab(event, 'File')"><i class="fas fa-file"></i> FILE</button>
+                <button class="tab" onclick="openTab(event, 'DSC')"><i class="fas fa-database"></i> DSC</button>
+            </div>
+            <div id="File" class="tabcontent" style="display: block;">
+                <div class="placeholder">Loading data...</div>
+            </div>
+            <div id="DSC" class="tabcontent">
+                <div class="placeholder">Loading data...</div>
+            </div>
+        </div>
+    </div>
+
     <script>
+        // --- Password Logic ---
         function checkPassword() {
             var password = document.getElementById("passwordInput").value;
             if (password === "666666") {
-                window.location.href = "main.html"; // Replace with your main site's filename
+                document.getElementById('password-section').style.display = 'none';
+                document.getElementById('main-content').style.display = 'block';
+                document.body.className = 'main-app-body';
+                loadAllData(); // Load data after successful login
             } else {
                 alert("Incorrect password. Please try again.");
-                // For a more elegant solution, you can display an error message in the UI instead
             }
         }
-        // Allow submitting with Enter key
         document.getElementById("passwordInput").addEventListener("keyup", function(event) {
             if (event.key === "Enter") {
                 checkPassword();
             }
         });
+
+        // --- Main Application Logic ---
+        let isDataReady = false;
+        const fileData = [];
+        const dscData = [];
+        let isDesktop = window.innerWidth >= 768;
+
+        function openTab(evt, tabName) {
+            const tabcontent = document.getElementsByClassName("tabcontent");
+            for (let i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            const tablinks = document.getElementsByClassName("tab");
+            for (let i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+            document.querySelector('.search-bar').value = '';
+            handleSearch();
+        }
+
+        function handleSearch() {
+            if (!isDataReady) return;
+            const activeTabId = document.querySelector('.tab.active').getAttribute('onclick').includes('File') ? 'File' : 'DSC';
+            const data = activeTabId === 'File' ? fileData : dscData;
+            filterResults(activeTabId, data);
+        }
+
+        function filterResults(tableId, data) {
+            const searchTerm = document.querySelector('.search-bar').value.toLowerCase();
+            const container = document.getElementById(tableId);
+            if (searchTerm.trim() === '') {
+                container.innerHTML = `<div class="placeholder">Type in the search bar to see results</div>`;
+                return;
+            }
+            if (data.length < 2) {
+                container.innerHTML = `<div class="placeholder">No data available</div>`;
+                return;
+            }
+            const headers = data[0];
+            const dataRows = data.slice(1);
+            const filteredRows = dataRows.filter(row => row.some(cell => cell.toLowerCase().includes(searchTerm)));
+            populateResults(tableId, headers, filteredRows);
+        }
+
+        function populateResults(containerId, headers, rows) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            const resultCount = document.createElement('div');
+            resultCount.className = 'result-count';
+            resultCount.textContent = `${rows.length} Result${rows.length !== 1 ? 's' : ''} Found`;
+            container.appendChild(resultCount);
+            if (rows.length === 0) return;
+            if (isDesktop) {
+                populateTable(container, headers, rows);
+            } else {
+                populateList(container, headers, rows);
+            }
+        }
+
+        function populateTable(container, headers, rows) {
+            const tableWrapper = document.createElement('div');
+            tableWrapper.className = 'table-wrapper';
+            const table = document.createElement('table');
+            const headerRow = document.createElement('tr');
+            headers.forEach(header => {
+                const th = document.createElement('th');
+                th.textContent = header;
+                headerRow.appendChild(th);
+            });
+            table.appendChild(headerRow);
+            rows.forEach(row => {
+                const tr = document.createElement('tr');
+                row.forEach(cell => {
+                    const td = document.createElement('td');
+                    td.textContent = cell;
+                    tr.appendChild(td);
+                });
+                table.appendChild(tr);
+            });
+            tableWrapper.appendChild(table);
+            container.appendChild(tableWrapper);
+        }
+
+        function populateList(container, headers, rows) {
+            const resultList = document.createElement('div');
+            resultList.className = 'result-list';
+            rows.forEach(row => {
+                const item = document.createElement('div');
+                item.className = 'result-item';
+                const header = document.createElement('div');
+                header.className = 'result-header';
+                header.innerHTML = `<span>${row[0] || 'No Title'}</span><i class="fas fa-chevron-down"></i>`;
+                const body = document.createElement('div');
+                body.className = 'result-body';
+                let bodyContent = '';
+                headers.slice(1).forEach((h, i) => {
+                    bodyContent += `<p><strong>${h}:</strong> ${row[i + 1] || ''}</p>`;
+                });
+                body.innerHTML = bodyContent;
+                item.appendChild(header);
+                item.appendChild(body);
+                resultList.appendChild(item);
+            });
+            container.appendChild(resultList);
+        }
+        
+        document.querySelector('#main-content').addEventListener('click', function(e) {
+            const header = e.target.closest('.result-header');
+            if (header) {
+                const item = header.parentElement;
+                item.classList.toggle('active');
+                const body = header.nextElementSibling;
+                if (body.style.display === "block") {
+                    body.style.display = "none";
+                } else {
+                    body.style.display = "block";
+                }
+            }
+        });
+
+        function debounce(func, delay) {
+            let timeout;
+            return function(...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), delay);
+            };
+        }
+
+        const debouncedHandleSearch = debounce(handleSearch, 300);
+
+        window.addEventListener('resize', () => {
+            isDesktop = window.innerWidth >= 768;
+            handleSearch();
+        });
+
+        function loadAllData() {
+            let fileLoaded = false;
+            let dscLoaded = false;
+            const onComplete = () => {
+                if (fileLoaded && dscLoaded) {
+                    isDataReady = true;
+                    document.querySelectorAll('#main-content .placeholder').forEach(p => {
+                        p.textContent = 'Type in the search bar to see results';
+                    });
+                }
+            };
+            Papa.parse("file.csv", {
+                download: true,
+                skipEmptyLines: true,
+                header: false,
+                complete: function(results) {
+                    fileData.push(...results.data);
+                    fileLoaded = true;
+                    onComplete();
+                }
+            });
+            Papa.parse("dsc.csv", {
+                download: true,
+                skipEmptyLines: true,
+                header: false,
+                complete: function(results) {
+                    dscData.push(...results.data);
+                    dscLoaded = true;
+                    onComplete();
+                }
+            });
+        }
     </script>
 </body>
 </html>
