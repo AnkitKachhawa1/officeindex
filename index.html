@@ -142,17 +142,41 @@
             box-sizing: border-box;
             margin: 0 auto 20px auto; /* Center horizontally and set bottom margin */
         }
+        
         #main-content .search-system {
             background-color: var(--container-bg-color);
             border-radius: 10px;
             box-shadow: 0 4px 20px var(--shadow-color);
             padding: clamp(1rem, 5vw, 2rem);
-            width: 800px; /* Fixed width for desktop */
-            max-height: 500px; /* Fixed max-height for desktop */
+            width: 800px; /* Fixed width for both desktop and mobile */
+            min-width: 750px; /* Minimum width to prevent shrinking */
+            max-height: 500px; /* Fixed max-height */
             overflow-y: auto; /* Allow scrolling if content exceeds max-height */
             box-sizing: border-box;
             margin: 20px auto 0 auto; /* Center horizontally and set top margin */
         }
+        
+        /* Mobile specific overrides - maintaining wider width */
+        @media (max-width: 767px) {
+            body.main-app-body {
+                padding: 0.5rem;
+                overflow-x: auto; /* Allow horizontal scrolling if needed */
+            }
+            
+            #main-content .search-system {
+                width: 750px; /* Fixed wider width for mobile */
+                min-width: 750px; /* Maintain minimum width */
+                max-height: 80vh; /* Responsive height for mobile */
+                margin: 10px auto 0 auto;
+            }
+            
+            #main-content .header {
+                width: 750px; /* Match search system width */
+                max-width: 750px;
+                margin: 0 auto 10px auto;
+            }
+        }
+        
         /* Hide scrollbar for Webkit browsers */
         #main-content .search-system::-webkit-scrollbar {
             display: none;
@@ -211,17 +235,14 @@
         #main-content .tabcontent {
             scrollbar-width: none; /* Firefox */
         }
-        /* Media query for mobile responsiveness */
+        
+        /* Remove the previous mobile media query that made it responsive */
         @media (max-width: 767px) {
-            #main-content .search-system {
-                width: 95%; /* Responsive width for mobile */
-                max-width: none; /* Remove max-width for mobile */
-                max-height: 80vh; /* Responsive max-height for mobile */
-            }
             #main-content .tabcontent {
                 max-height: none; /* Remove max-height for mobile tab content */
             }
         }
+        
         #main-content .placeholder {
             display: flex;
             justify-content: center;
@@ -475,7 +496,8 @@
                     body.style.display = "block";
                 }
             }
-        });
+        }
+        );
 
         function debounce(func, delay) {
             let timeout;
